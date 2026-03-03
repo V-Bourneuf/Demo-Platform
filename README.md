@@ -1,109 +1,49 @@
 # Okta Demo Platform — SE Identity Flow Explorer
 
-Visual companion tool for Okta SE demos. Reads live Okta logs + API data and displays them
-as interactive identity flow diagrams, per the three use cases below.
+Visual companion tool for Okta SE demos. Displays live identity flows, app access, and auth events across three use cases.
 
----
-
-## Quick Start
-
-### MacBook (local)
-
-```bash
-mkdir okta-demo-platform && cd okta-demo-platform
-# Copy App.jsx into src/, server.js and package.json into root, public/index.html into public/
-npm install
-node server.js
-# Open http://localhost:3000
-```
-
-### GitHub Codespace
+## Setup (one time)
 
 ```bash
 npm install
-node server.js
-# Forward port 3000 in the Ports tab
-# Use the https://xxx.github.dev forwarded URL as Backend URL in the app config
 ```
 
----
+## Run
+
+```bash
+npm run dev
+```
+
+This starts **both** the API server (port 3001) and the Vite dev server (port 5173) simultaneously.
+
+Open the URL shown in your terminal — in Codespace, forward **port 5173** and open the forwarded URL.
+
+## Configure
+
+On first load, a config modal appears. Either:
+- **Demo Mode** — click "Demo Mode" for mock data, no Okta needed
+- **Live Mode** — enter your Okta domain (e.g. `dev-12345.okta.com`) and an API token
+
+To get an API token: Okta Admin → Security → API → Tokens → Create Token
+
+## Use Cases
+
+| Tab | What it shows |
+|-----|--------------|
+| 🏢 Centralized Identity | User profile with attribute sources (AD/HRIS/Okta), lifecycle events, identity flow diagram |
+| ⚡ Workforce Agility | App assignments, group memberships, snapshot diff for Joiner/Mover/Leaver demos |
+| 🔐 End-User Security | Auth events with risk scores, policy evaluations, device/IP signals |
+| 📜 System Log | Full searchable/filterable event log |
 
 ## File Structure
 
 ```
 okta-demo-platform/
-  server.js          ← Express proxy (RENAME server_code.txt → server.js)
-  package.json
-  public/
-    index.html       ← React SPA (built from App.jsx)
-  src/
-    App.jsx          ← Full React app source
+├── server.js          ← Express API proxy (port 3001)
+├── vite.config.js     ← Vite config + /api proxy
+├── index.html         ← Vite entry point
+├── package.json
+└── src/
+    ├── main.jsx       ← React entry
+    └── App.jsx        ← Full application
 ```
-
----
-
-## Setup: Create public/index.html
-
-Create `public/index.html` with this content (serves the React app from CDN):
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Okta Demo Platform</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet"/>
-</head>
-<body>
-  <div id="root"></div>
-  <script type="text/babel" src="/App.jsx"></script>
-</body>
-</html>
-```
-
-> Note: Alternatively, use `create-react-app` or Vite and drop App.jsx into src/.
-
----
-
-## Okta API Token
-
-1. Log in to your Okta Admin console
-2. Go to **Security → API → Tokens**
-3. Click **Create Token** and copy the value
-4. Paste into the app config screen
-
----
-
-## Demo Use Cases
-
-### UC1 — Centralized Identity
-- Shows user profile with per-attribute source labels (AD, HRIS, Okta)
-- Identity lifecycle events: create, sync, import, activate
-- Visual flow: HR → AD → Okta UD → SaaS Apps
-
-### UC2 — Workforce Agility (Joiner / Mover / Leaver)
-- Shows app assignments with logos
-- Group memberships (policy groups vs app groups)
-- **Snapshot feature**: take a before-snapshot, make changes in Okta, refresh → see the diff (added/removed apps)
-- Provisioning events log
-
-### UC3 — End-User Security
-- Authentication events with risk scores and behavioral signals
-- Policy evaluations: outcome (ALLOW / CHALLENGE / DENY), risk level
-- Device signals: IP addresses, browser/OS, geolocation
-
-### System Log Tab
-- Full searchable event log, filterable by event type
-
----
-
-## Notes
-
-- **Demo Mode**: Click "Demo Mode" in config to use mock data without any Okta connection
-- The user dropdown lists all users from your Okta tenant
-- App logos are automatically matched by app name (AWS, Salesforce, Slack, GitHub, DocuSign, etc.)
-- For GitHub Codespace: use the HTTPS forwarded URL (not localhost) as the Backend URL

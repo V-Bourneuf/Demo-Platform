@@ -1,16 +1,21 @@
 {
   "name": "okta-demo-platform",
   "version": "1.0.0",
-  "description": "Okta SE Demo Platform – visual identity flow explorer",
-  "main": "server.js",
+  "description": "Okta SE Demo Platform — Identity Flow Explorer",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "concurrently -n API,UI -c cyan,magenta \"node server.js\" \"vite\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "node-fetch": "^2.7.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.3.1"
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "vite": "^5.1.4"
   }
 }
